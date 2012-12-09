@@ -5,7 +5,7 @@ Android V Content Provider
 
 - Super light library, only 30KB for version 1.0.
 
-- Creating datbase tables and build Content Provider within a single fucntion.
+- Creating datbase tables and views and build Content Provider within a single fucntion.
 
 - Provide APIs to create SQLite databse table and view by method chaining.
 
