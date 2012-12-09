@@ -1,11 +1,13 @@
 Android V Content Provider
 ================
+All in one SQLite database solution for android.
+
 
 #Features:
 
 - Super light library, only 30KB for version 1.0.
 
-- Creating datbase tables and views and build Content Provider within a single fucntion.
+- Creating database tables and views and build Content Provider within a single fucntion.
 
 - Provide APIs to create SQLite databse table and view by method chaining.
 
