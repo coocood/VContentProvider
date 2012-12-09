@@ -1,0 +1,32 @@
+[
+    {
+        "id": 1,
+        "content": "Good point.",
+        "user_id": 3,
+        "post_id": 1
+    },
+    {
+        "id": 2,
+        "content": "Helpful.",
+        "user_id": 4,
+        "post_id": 1
+    },
+    {
+        "id": 3,
+        "content": "Updated.",
+        "user_id": 1,
+        "post_id": 1
+    },
+    {
+        "id": 4,
+        "content": "LOL",
+        "user_id": 4,
+        "post_id": 2
+    },
+    {
+        "id": 5,
+        "content": "Funny.",
+        "user_id": 3,
+        "post_id": 2
+    }
+]

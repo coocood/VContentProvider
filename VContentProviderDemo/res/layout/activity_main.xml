@@ -1,0 +1,34 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/LinearLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".MainActivity" >
+
+    <Button
+        android:id="@+id/loadJson"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Load JSON Data" />
+
+    <Button
+        android:id="@+id/allUsers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="All Users" />
+
+    <Button
+        android:id="@+id/allPosts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="All Posts" />
+
+    <Button
+        android:id="@+id/allComments"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="All Comments" />
+
+</LinearLayout>
