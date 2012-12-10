@@ -23,8 +23,8 @@ All in one SQLite database solution for android.
         
         VTableCreation postTable = new VTableCreation(Post.TABLE,"id")
     			.addTextNotNullColumn(Post.TITLE, true)
-				.addTextColumn(Post.CONTENT, null, true)
-				.addIntegerForeignKeyColumn(Post.AUTHOR_ID, User.TABLE, true);
+			.addTextColumn(Post.CONTENT, null, true)
+			.addIntegerForeignKeyColumn(Post.AUTHOR_ID, User.TABLE, true);
         version.newTable(postTable);
 
         VViewCreation postView = new VViewCreation(Post.VIEW, postTable)
@@ -43,3 +43,6 @@ All in one SQLite database solution for android.
 - Implement applyBatch() and bulkIntert() in transaction to improve performance.
 
 - Query on VCursorAdapter asynchronously without the need to use compatibility package and implement LoaderCallbacks.
+
+        adapter = new PostViewAdapter(this);
+        adapter.query(Post.VIEW_URI, null, selection, null, null);
