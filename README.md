@@ -40,7 +40,7 @@ All in one SQLite database solution for android.
         JSONArray userJsonArray = new JSONArray(userString);
     	DemoProvider.updateWithJSONArray(getApplicationContext(), User.URI, userJsonArray, null, null);
 
-- Implement applyBatch() and bulkIntert() in transaction to improve performance.
+- Implement applyBatch() and bulkInsert() in transaction to improve performance.
 
 - Query on VCursorAdapter asynchronously without the need to use compatibility package and implement LoaderCallbacks.
 
