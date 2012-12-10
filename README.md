@@ -23,8 +23,8 @@ All in one SQLite database solution for android.
         
         VTableCreation postTable = new VTableCreation(Post.TABLE,"id")
     			.addTextNotNullColumn(Post.TITLE, true)
-			.addTextColumn(Post.CONTENT, null, true)
-			.addIntegerForeignKeyColumn(Post.AUTHOR_ID, User.TABLE, true);
+				.addTextColumn(Post.CONTENT, null, true)
+				.addIntegerForeignKeyColumn(Post.AUTHOR_ID, User.TABLE, true);
         version.newTable(postTable);
 
         VViewCreation postView = new VViewCreation(Post.VIEW, postTable)
