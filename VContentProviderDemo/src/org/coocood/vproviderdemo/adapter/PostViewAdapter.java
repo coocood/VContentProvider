@@ -1,18 +1,21 @@
 package org.coocood.vproviderdemo.adapter;
 
-import org.coocood.vproviderdemo.R;
 import org.coocood.vcontentprovider.VCursorAdapter;
+import org.coocood.vproviderdemo.R;
 import org.coocood.vproviderdemo.activity.CommentViewActivity;
 import org.coocood.vproviderdemo.model.Comment;
 import org.coocood.vproviderdemo.model.Post;
 import org.coocood.vproviderdemo.model.User;
 import org.coocood.vproviderdemo.util.CursorBinder;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 
 public class PostViewAdapter extends VCursorAdapter {
@@ -41,6 +44,27 @@ public class PostViewAdapter extends VCursorAdapter {
 						System.out.println(id);
 						intent.putExtra(Comment.POST_ID, id);
 						context.startActivity(intent);
+					}
+				})
+				.longClick(0, new OnLongClickListener() {
+					
+					@Override
+					public boolean onLongClick(View v) {
+						new AlertDialog.Builder(context)
+						.setTitle("Are you sure to delete?")
+						.setPositiveButton("YES",
+								new DialogInterface.OnClickListener() {
+
+									@Override
+									public void onClick(DialogInterface dialog,
+											int which) {
+										context.getContentResolver().delete(
+												Post.URI, "_id="+id,
+												null);
+									}
+								})
+						.setNegativeButton("Cancel", null).create().show();
+						return true;
 					}
 				});
 	}

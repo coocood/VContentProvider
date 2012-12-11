@@ -3,6 +3,7 @@ package org.coocood.vproviderdemo.util;
 import android.database.Cursor;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.widget.TextView;
 
 public class CursorBinder {
@@ -22,6 +23,11 @@ public class CursorBinder {
 	public CursorBinder click(int viewId, OnClickListener listener) {
 		View currentView = viewId == 0 ? view : view.findViewById(viewId);
 		currentView.setOnClickListener(listener);
+		return this;
+	}
+	public CursorBinder longClick(int viewId, OnLongClickListener listener){
+		View currentView = viewId == 0 ? view : view.findViewById(viewId);
+		currentView.setOnLongClickListener(listener);
 		return this;
 	}
 }
