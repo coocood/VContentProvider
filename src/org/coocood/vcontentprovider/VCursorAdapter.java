@@ -43,11 +43,9 @@ public abstract class VCursorAdapter extends CursorAdapter {
 	private String selection;
 	private String[] selectionArgs;
 	private String sortOrder;
-	private ContentObserver observer;
 	public VCursorAdapter(Context context) {
 		super(context, null, false);
 		this.context = context;
-		this.observer = new ChangeObserver();
 	}
 	
 	public void query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder){
@@ -70,9 +68,6 @@ public abstract class VCursorAdapter extends CursorAdapter {
 			@Override
 			protected void onPostExecute(Cursor result) {
 				changeCursor(result);
-				notifyDataSetChanged();
-				if(result!=null)
-					result.registerContentObserver(observer);
 			}
 		};
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
@@ -86,19 +81,4 @@ public abstract class VCursorAdapter extends CursorAdapter {
 	protected void onContentChanged() {
 		loadCursor();
 	}
-	private class ChangeObserver extends ContentObserver {
-        public ChangeObserver() {
-            super(new Handler());
-        }
-
-        @Override
-        public boolean deliverSelfNotifications() {
-            return true;
-        }
-
-        @Override
-        public void onChange(boolean selfChange) {
-            onContentChanged();
-        }
-    }
 }
