@@ -129,9 +129,11 @@ public abstract class VContentProvider extends ContentProvider {
 		String table = getTableName(uri);
 		String idPath = getIdPath(uri);
 		db = mOpenHelper.getReadableDatabase();
-		return db.query(table, projection,
+		Cursor c = db.query(table, projection,
 				finalSelection(idPath, selection), selectionArgs, null,
 				null, sortOrder);
+		c.setNotificationUri(getContext().getContentResolver(), uri);
+		return c;
 	}
 
 	@Override
