@@ -18,12 +18,10 @@ package org.coocood.vcontentprovider;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.os.Handler;
 import android.widget.CursorAdapter;
 
 /**
