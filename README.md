@@ -46,3 +46,18 @@ All in one SQLite database solution for android.
 
         adapter = new PostViewAdapter(this);
         adapter.query(Post.VIEW_URI, null, selection, null, null);
+
+#TODO
+
+- Support update with child table's JSONObject that contains parent table's data, to comply foreign key constraint.
+	
+		{
+        	"id": 1,
+        	"title": "Why",
+        	"content": "I’m good friends with 25 letters of the alphabet … I don’t know why.",
+        	"author_id": 1,
+			"author":{
+        		"id": 1,
+        		"name": "John"
+    		}
+    	}
