@@ -5,7 +5,7 @@ All in one SQLite database solution for android.
 
 #Features:
 
-- Super light library, only 30KB(uncompressed source files) for version 1.0.
+- Super light library, only 31KB(uncompressed source files) for version 1.1. No dependencies.
 
 - Creating database tables and views and build Content Provider within a single fucntion.
 
