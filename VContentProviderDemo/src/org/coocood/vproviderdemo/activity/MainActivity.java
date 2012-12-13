@@ -2,6 +2,7 @@ package org.coocood.vproviderdemo.activity;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.LinkedHashMap;
 
 import org.apache.http.protocol.HTTP;
 import org.coocood.vproviderdemo.DemoProvider;
@@ -34,17 +35,17 @@ public class MainActivity extends Activity{
 			public void onClick(View v) {
 				AssetManager assets = getAssets();
 				try {
-					String userString =convertStreamToString(assets.open("user"));
-					JSONArray userJsonArray = new JSONArray(userString);
-					DemoProvider.updateWithJSONArray(getApplicationContext(), User.URI, userJsonArray, null, null);
-					
 					String postString = convertStreamToString(assets.open("post"));
 					JSONArray postJsonArray = new JSONArray(postString);
-					DemoProvider.updateWithJSONArray(getApplicationContext(), Post.URI, postJsonArray, null, null);
+					LinkedHashMap<String, String> authorObjectMap = new LinkedHashMap<String, String>();
+					authorObjectMap.put("author", User.TABLE);
+					DemoProvider.updateWithJSONArray(getApplicationContext(), Post.URI, postJsonArray, authorObjectMap);
 					
 					String commentString = convertStreamToString(assets.open("comment"));
 					JSONArray commentJsonArray = new JSONArray(commentString);
-					DemoProvider.updateWithJSONArray(getApplicationContext(), Comment.URI, commentJsonArray, null, null);
+					LinkedHashMap<String, String> userObjectMap = new LinkedHashMap<String, String>();
+					userObjectMap.put("user",User.TABLE);
+					DemoProvider.updateWithJSONArray(getApplicationContext(), Comment.URI, commentJsonArray, userObjectMap);
 					
 				} catch (IOException e) {
 					e.printStackTrace();

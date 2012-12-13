@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -60,29 +61,76 @@ public abstract class VContentProvider extends ContentProvider {
 			ArrayList<VDatabaseVersion> dbVersions,
 			HashMap<String, VViewCreation> viewCreationMap);
 
-	public static int updateWithJSONObject(Context context, Uri uri,
-			JSONObject json, String where, String[] selectionArgs)
-			throws JSONException {
-		String table = getTableName(uri);
-		ContentValues values = getValues(table, json);
-		return context.getContentResolver().update(uri, values, where,
-				selectionArgs);
-	}
-
+	/**
+	 * see also {@link #updateWithJSONObject}
+	 */
 	public static ContentProviderResult[] updateWithJSONArray(Context context,
-			Uri uri, JSONArray array, String selection, String[] selectionArgs)
+			Uri uri, JSONArray array,
+			LinkedHashMap<String, String> subJSONObjectMap)
 			throws RemoteException, OperationApplicationException,
 			JSONException {
-		String table = getTableName(uri);
+		Uri baseUri = new Uri.Builder().scheme(uri.getScheme())
+				.authority(uri.getAuthority()).build();
 		ArrayList<ContentProviderOperation> operations = new ArrayList<ContentProviderOperation>();
 		for (int i = 0; i < array.length(); i++) {
-			JSONObject obj = array.getJSONObject(i);
-			operations.add(ContentProviderOperation.newUpdate(uri)
-					.withValues(getValues(table, obj))
-					.withSelection(selection, selectionArgs).build());
+			JSONObject json = array.getJSONObject(i);
+			addOperations(operations, uri, baseUri, json, subJSONObjectMap);
 		}
 		return context.getContentResolver().applyBatch(uri.getAuthority(),
 				operations);
+	}
+
+	/**
+	 * If the JSONObject has any sub JSONObject, create a LinkedHashMap and
+	 * put the key to the sub JSONObject and the corresponding table name as value in it.
+	 * first in, first out(get updated).
+	 */
+	public static ContentProviderResult[] updateWithJSONObject(Context context,
+			Uri uri, JSONObject json,
+			LinkedHashMap<String, String> subJSONObjectMap)
+			throws JSONException, RemoteException,
+			OperationApplicationException {
+		Uri baseUri = new Uri.Builder().scheme(uri.getScheme())
+				.authority(uri.getAuthority()).build();
+		ArrayList<ContentProviderOperation> operations = new ArrayList<ContentProviderOperation>();
+		addOperations(operations, uri, baseUri, json, subJSONObjectMap);
+		return context.getContentResolver().applyBatch(uri.getAuthority(),
+				operations);
+	}
+
+	private static void addOperations(
+			ArrayList<ContentProviderOperation> operations, Uri uri,
+			Uri baseUri, JSONObject json,
+			LinkedHashMap<String, String> subJSONObjectMap)
+			throws JSONException {
+		if (subJSONObjectMap != null) {
+			for (String key : subJSONObjectMap.keySet()) {
+				JSONObject subJson = json.getJSONObject(key);
+				String subTable = subJSONObjectMap.get(key);
+				operations.add(getOperation(baseUri, subJson, subTable));
+			}
+		}
+		String table = getTableName(uri);
+		operations.add(getOperation(baseUri, json, table));
+	}
+
+	private static ContentProviderOperation getOperation(Uri baseUri,
+			JSONObject json, String table) throws JSONException {
+		Uri uri = Uri.withAppendedPath(baseUri, table);
+		ArrayList<String> columns = tableMap.get(table);
+		ContentValues values = new ContentValues();
+		for (int i = 0; i < columns.size(); i++) {
+			String column = columns.get(i);
+			if (json.has(column)) {
+				String value = json.getString(column);
+		
+				// The id column index in the columns ArrayList is 0.
+				// Put "_id" as the local id column name.
+				values.put(i == 0 ? "_id" : column, value);
+			}
+		}
+		return ContentProviderOperation.newUpdate(uri).withValues(values)
+				.build();
 	}
 
 	@Override
@@ -130,8 +178,8 @@ public abstract class VContentProvider extends ContentProvider {
 		String idPath = getIdPath(uri);
 		db = mOpenHelper.getReadableDatabase();
 		Cursor c = db.query(table, projection,
-				finalSelection(idPath, selection), selectionArgs, null,
-				null, sortOrder);
+				finalSelection(idPath, selection), selectionArgs, null, null,
+				sortOrder);
 		c.setNotificationUri(getContext().getContentResolver(), uri);
 		return c;
 	}
@@ -175,8 +223,8 @@ public abstract class VContentProvider extends ContentProvider {
 		String table = getTableName(uri);
 		String idPath = getIdPath(uri);
 		db = mOpenHelper.getWritableDatabase();
-		int deleteCount = db.delete(table,
-				finalSelection(idPath, selection), selectionArgs);
+		int deleteCount = db.delete(table, finalSelection(idPath, selection),
+				selectionArgs);
 		notifyChange(uri, deleteCount);
 		return deleteCount;
 	}
@@ -326,22 +374,5 @@ public abstract class VContentProvider extends ContentProvider {
 			}
 		}
 
-	}
-
-	private static ContentValues getValues(String table, JSONObject json)
-			throws JSONException {
-		ArrayList<String> columns = tableMap.get(table);
-		ContentValues values = new ContentValues();
-		for (int i = 0; i < columns.size(); i++) {
-			String column = columns.get(i);
-			if (json.has(column)) {
-				String value = json.getString(column);
-
-				// The id column index in the columns ArrayList is 0.
-				// Put "_id" as the local id column name.
-				values.put(i == 0 ? "_id" : column, value);
-			}
-		}
-		return values;
 	}
 }
