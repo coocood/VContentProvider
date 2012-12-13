@@ -38,7 +38,7 @@ All in one SQLite database solution for android.
 - Update/Insert database table with JSONObject or JSONArray directly.
 
         JSONArray userJsonArray = new JSONArray(userString);
-    	DemoProvider.updateWithJSONArray(getApplicationContext(), User.URI, userJsonArray, null, null);
+    	DemoProvider.updateWithJSONArray(getApplicationContext(), User.URI, userJsonArray, null);
 
 - Implement applyBatch() and bulkInsert() in transaction to improve performance.
 
@@ -46,6 +46,11 @@ All in one SQLite database solution for android.
 
         adapter = new PostViewAdapter(this);
         adapter.query(Post.VIEW_URI, null, selection, null, null);
+
+#How does it work
+
+I highly recommend you to read this [WIKI](https://github.com/coocood/VContentProvider/wiki/How-does-VContentProvider-work%3F) page before use it.
+It explains in detail what problems you are facing when creating database and content provider, and how VContentProvider resolve the problems.
         
 #Usage
 
@@ -75,17 +80,3 @@ All in one SQLite database solution for android.
 	set the "android:exported" attribute to "false".
 
 
-#TODO
-
-- Support update with child table's JSONObject that contains parent table's data, to comply foreign key constraint.
-	
-		{
-        	"id": 1,
-        	"title": "Why",
-        	"content": "I’m good friends with 25 letters of the alphabet … I don’t know why.",
-        	"author_id": 1,
-			"author":{
-        		"id": 1,
-        		"name": "John"
-    		}
-    	}
