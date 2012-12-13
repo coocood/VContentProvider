@@ -46,6 +46,34 @@ All in one SQLite database solution for android.
 
         adapter = new PostViewAdapter(this);
         adapter.query(Post.VIEW_URI, null, selection, null, null);
+        
+#Usage
+
+1. you can either copy the source files into your project or link the library project.
+
+2. Subclass VContentProvider.
+
+3. Implement "addDatabaseVersionsViewsAndGetName" method.
+
+4. In the method create a VDatabaseVersion object.
+
+5. Create VTableCreation objects, define your table.
+
+6. Put VTableCreation objects into a VDatabaseVersion by calling "newTable" method.
+
+7. You can create multiple VDatabaseVersion objects if you need to add new table or add new columns to a existing table.
+
+7. Add all versions to the given ArrayList "allVersions".
+
+8. Create VViewCreation objects, define your view.
+
+9. Put All VViewCreation objects into the given Map "viewCreationMap".
+
+10. return the database name.
+
+11. In your manifest.xml file, define your content provider, set the "android:authorities" attribute, if you don't want to expose your content to other applications.
+	set the "android:exported" attribute to "false".
+
 
 #TODO
 
