@@ -5,9 +5,9 @@
         "content": "I’m good friends with 25 letters of the alphabet … I don’t know why.",
         "author_id": 1,
         "author":{
-        	"id": 1,
-        	"name": "John"
-    	}
+            "id": 1,
+            "name": "John"
+        }
     },
     {
         "id": 2,
@@ -15,9 +15,9 @@
         "content": "How do you make a hot dog stand? Steal its chair.",
         "author_id": 2,
         "author":{
-        	"id": 2,
-        	"name": "Steve"
-    	}
+            "id": 2,
+            "name": "Steve"
+        }
     },
     {
         "id": 3,
@@ -25,8 +25,8 @@
         "content": "What bird can lift the most? A crane.",
         "author_id": 2,
         "author":{
-        	"id": 2,
-        	"name": "Steve"
-    	}
+            "id": 2,
+            "name": "Steve"
+        }
     }
 ]
