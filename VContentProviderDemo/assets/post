@@ -1,5 +1,5 @@
 [
-    {
+	{
         "id": 1,
         "title": "Why",
         "content": "I’m good friends with 25 letters of the alphabet … I don’t know why.",
@@ -8,8 +8,8 @@
             "id": 1,
             "name": "John"
         }
-    },
-    {
+	},
+	{
         "id": 2,
         "title": "Dog",
         "content": "How do you make a hot dog stand? Steal its chair.",
@@ -18,8 +18,8 @@
             "id": 2,
             "name": "Steve"
         }
-    },
-    {
+	},
+	{
         "id": 3,
         "title": "Lift",
         "content": "What bird can lift the most? A crane.",
@@ -28,5 +28,5 @@
             "id": 2,
             "name": "Steve"
         }
-    }
+	}
 ]
