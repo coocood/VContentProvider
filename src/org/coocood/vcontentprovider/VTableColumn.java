@@ -63,7 +63,7 @@ public final class VTableColumn {
 		if (notNull)
 			sb.append(" NOT NULL");
 		if (defaultValue != null)
-			sb.append(" DEFAULT ").append(defaultValue);
+			sb.append(" DEFAULT '").append(defaultValue).append("'");
 		if (parentTable != null) {
 			sb.append(" REFERENCES ").append(parentTable)
 					.append(" ON DELETE ");
