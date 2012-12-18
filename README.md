@@ -1,4 +1,4 @@
-Android V Content Provider
+VContentProvider
 ================
 All in one SQLite database solution for android.
 
