@@ -7,7 +7,7 @@ All in one SQLite database solution for android.
 
 - Super light library, only 31KB(uncompressed source files) for version 1.1. No dependencies.
 
-- Creating database tables and views and build Content Provider within a single fucntion.
+- Creating database tables and views and build Content Provider within a single function.
 
         protected String addDatabaseVersionsViewsAndGetName(ArrayList<VDatabaseVersion> allversions, 
                 HashMap<String, VViewCreation> viewCreationMap){
@@ -19,7 +19,7 @@ All in one SQLite database solution for android.
             return "database";
         }
 
-- Provide APIs to create SQLite databse table and view by method chaining.
+- Provide APIs to create SQLite database table and view by method chaining.
         
         VTableCreation postTable = new VTableCreation(Post.TABLE,"id")
     			.addTextNotNullColumn(Post.TITLE, true)
@@ -80,3 +80,6 @@ It explains in detail what problems you are facing when creating database and co
 	set the "android:exported" attribute to "false".
 
 
+# License
+
+* [Apache Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html)
