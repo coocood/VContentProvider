@@ -40,6 +40,7 @@ public final class VTableColumn {
 		this.parentTable = parentTable;
 		this.cascade = cascade;
 		this.nocase = nocase;
+		this.notNull = notNull;
 	}
 
 	void appendDefinition(StringBuilder sb) {
