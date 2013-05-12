@@ -77,6 +77,7 @@ public final class VSQLiteOpenHelper extends SQLiteOpenHelper {
 			db.execSQL("DROP TABLE IF EXISTS " + tableCreation.table);
 			db.execSQL(tableCreation.sqlString());
 		}
+		upgrade.collectIndices();
 		for (String indexSql : upgrade.indices) {
 			db.execSQL(indexSql);
 		}
