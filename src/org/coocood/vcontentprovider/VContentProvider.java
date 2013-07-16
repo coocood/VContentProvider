@@ -164,8 +164,11 @@ public abstract class VContentProvider extends ContentProvider {
 		for (VViewCreation viewCreation : viewMap.values()) {
 			ArrayList<String> viewTables = new ArrayList<String>();
 			viewTables.add(viewCreation.childTable.table);
-			viewTables.addAll(viewCreation.parentTables.keySet());
-			viewTablesMap.put(viewCreation.viewName, viewTables);
+            for (String key : viewCreation.parentTables.keySet()) {
+                VTableCreation vTableCreation = viewCreation.parentTables.get(key);
+                viewTables.add(vTableCreation.table);
+            }
+            viewTablesMap.put(viewCreation.viewName, viewTables);
 		}
 		batchingUris = new HashSet<Uri>();
 		return true;
