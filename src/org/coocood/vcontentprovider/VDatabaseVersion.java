@@ -30,7 +30,7 @@ public final class VDatabaseVersion implements Comparable<VDatabaseVersion>{
 
 	public VDatabaseVersion(int version) {
 		this.version = version;
-	}
+    }
 
 	public VDatabaseVersion newTable(VTableCreation tableCreation) {
 		tableCreations.add(tableCreation);
@@ -39,32 +39,36 @@ public final class VDatabaseVersion implements Comparable<VDatabaseVersion>{
 
     public VDatabaseVersion alterTableAddIntegerColumn(VTableCreation tableCreation, String column,
             Long defaultValue) {
-        tableCreation.addIntegerColumn(column, defaultValue);
-        newColumns.add(new VTableColumn(tableCreation.table, column,
-                VTableColumn.TYPE_INTEGER, defaultValue, null, false, false, false));
+        final VTableColumn tableColumn = new VTableColumn(tableCreation.table, column,
+                VTableColumn.TYPE_INTEGER, defaultValue, null, false, false, false, this);
+        tableCreation.columns.add(tableColumn);
+        newColumns.add(tableColumn);
         return this;
     }
 
     public VDatabaseVersion alterTableAddTextColumn(VTableCreation tableCreation, String column,
 			String defaultValue,boolean collateNoCase) {
-        tableCreation.addTextColumn(column, defaultValue, collateNoCase);
-        newColumns.add(new VTableColumn(tableCreation.table, column,
-				VTableColumn.TYPE_TEXT, defaultValue,null,false,collateNoCase,false));
+        final VTableColumn tableColumn = new VTableColumn(tableCreation.table, column,
+                VTableColumn.TYPE_TEXT, defaultValue, null, false, collateNoCase, false, this);
+        tableCreation.columns.add(tableColumn);
+        newColumns.add(tableColumn);
 		return this;
 	}
 
     public VDatabaseVersion alterTableAddRealColumn(VTableCreation tableCreation, String column,
 			Double defaultValue) {
-        tableCreation.addRealColumn(column, defaultValue);
-        newColumns.add(new VTableColumn(tableCreation.table, column,
-				VTableColumn.TYPE_REAL, defaultValue,null,false,false,false));
+        final VTableColumn tableColumn = new VTableColumn(tableCreation.table, column,
+                VTableColumn.TYPE_REAL, defaultValue, null, false, false, false, this);
+        tableCreation.columns.add(tableColumn);
+        newColumns.add(tableColumn);
 		return this;
 	}
 
     public VDatabaseVersion alterTableAddBlobColumn(VTableCreation tableCreation, String column) {
-        tableCreation.addBlobColumn(column);
-        newColumns.add(new VTableColumn(tableCreation.table, column,
-				VTableColumn.TYPE_BLOB, null,null,false,false,false));
+        final VTableColumn tableColumn = new VTableColumn(tableCreation.table, column,
+                VTableColumn.TYPE_BLOB, null, null, false, false, false, this);
+        tableCreation.columns.add(tableColumn);
+        newColumns.add(tableColumn);
 		return this;
 	}
 
@@ -74,10 +78,11 @@ public final class VDatabaseVersion implements Comparable<VDatabaseVersion>{
 	}	
 
     public VDatabaseVersion alterTableAddIntegerForeignKeyColumn(VTableCreation tableCreation,
-			String column, String parentTable, boolean onDeleteCascade) {
+            String column, String parentTable, boolean onDeleteCascade) {
         tableCreation.addIntegerForeignKeyColumn(column, parentTable, onDeleteCascade);
-        newColumns.add(new VTableColumn(tableCreation.table, column,
-				VTableColumn.TYPE_INTEGER, null,parentTable,onDeleteCascade,false,false));
+        final VTableColumn tableColumn = new VTableColumn(tableCreation.table, column,
+                VTableColumn.TYPE_INTEGER, null, parentTable, onDeleteCascade, false, false, this);
+        newColumns.add(tableColumn);
         indices.add(VTableColumn.createIndexSql(tableCreation.table, column, false));
 		return this;
 	}
