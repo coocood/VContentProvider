@@ -17,80 +17,95 @@
 package org.coocood.vcontentprovider;
 
 public final class VTableColumn {
-	public static final int TYPE_INTEGER = 1;
-	public static final int TYPE_TEXT = 2;
-	public static final int TYPE_BLOB = 0;
-	public static final int TYPE_REAL = 3;
-	String table;
-	String name;
-	Object defaultValue;
-	String parentTable;
-	boolean cascade;
-	boolean nocase;
-	boolean notNull;
-	int type;
+    public static final int TYPE_INTEGER = 1;
+    public static final int TYPE_TEXT = 2;
+    public static final int TYPE_BLOB = 0;
+    public static final int TYPE_REAL = 3;
+    final String table;
+    final String name;
+    final Object defaultValue;
+    final String parentTable;
+    final boolean cascade;
+    final boolean nocase;
+    final boolean notNull;
+    final int type;
+    final VDatabaseVersion vDatabaseVersion;
 
 	public VTableColumn(String table, String name, int type,
 			Object defaultValue, String parentTable, boolean cascade,
 			boolean nocase, boolean notNull) {
-		this.table = table;
-		this.name = name;
-		this.type = type;
-		this.defaultValue = defaultValue;
-		this.parentTable = parentTable;
+        this.table = table;
+        this.name = name;
+        this.type = type;
+        this.defaultValue = defaultValue;
+        this.parentTable = parentTable;
 		this.cascade = cascade;
-		this.nocase = nocase;
-		this.notNull = notNull;
-	}
+        this.nocase = nocase;
+        this.notNull = notNull;
+        vDatabaseVersion = null;
+    }
 
-	void appendDefinition(StringBuilder sb) {
-		sb.append(name);
-		switch (type) {
-		case TYPE_INTEGER:
-			sb.append(" INTEGER");
-			break;
-		case TYPE_TEXT:
-			sb.append(" TEXT");
-			if (nocase)
-				sb.append(" COLLATE NOCASE");
-			break;
-		case TYPE_REAL:
-			sb.append(" REAL");
-			break;
-		default:
-			sb.append(" BLOB");
-			break;
-		}
-		if (notNull)
-			sb.append(" NOT NULL");
-		if (defaultValue != null)
+    public VTableColumn(String table, String name, int type, Object defaultValue,
+            String parentTable, boolean cascade, boolean nocase, boolean notNull, VDatabaseVersion vDatabaseVersion) {
+        this.table = table;
+        this.name = name;
+        this.type = type;
+        this.defaultValue = defaultValue;
+        this.parentTable = parentTable;
+        this.cascade = cascade;
+        this.nocase = nocase;
+        this.notNull = notNull;
+        this.vDatabaseVersion = vDatabaseVersion;
+    }
+
+    void appendDefinition(StringBuilder sb) {
+        sb.append(name);
+        switch (type) {
+            case TYPE_INTEGER:
+                sb.append(" INTEGER");
+                break;
+            case TYPE_TEXT:
+                sb.append(" TEXT");
+                if (nocase)
+                    sb.append(" COLLATE NOCASE");
+                break;
+            case TYPE_REAL:
+                sb.append(" REAL");
+                break;
+            default:
+                sb.append(" BLOB");
+                break;
+        }
+        if (notNull)
+            sb.append(" NOT NULL");
+        if (defaultValue != null)
 			sb.append(" DEFAULT '").append(defaultValue).append("'");
-		if (parentTable != null) {
+        if (parentTable != null) {
 			sb.append(" REFERENCES ").append(parentTable)
 					.append(" ON DELETE ");
 			if (cascade) {
-				sb.append("CASCADE");
-			} else {
-				sb.append("SET NULL");
-			}
-		}
-	}
+                sb.append("CASCADE");
+            } else {
+                sb.append("SET NULL");
+            }
+        }
+    }
 
-	static String createIndexSql(String table, String column, boolean unique) {
-		StringBuilder sb = new StringBuilder();
-		sb.append("CREATE");
-		if (unique)
-			sb.append(" UNIQUE");
+    static String createIndexSql(String table, String column, boolean unique) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("CREATE");
+        if (unique)
+            sb.append(" UNIQUE");
 		sb.append(" INDEX IF NOT EXISTS ").append("i_").append(table)
 				.append("_").append(column).append(" ON ").append(table)
 				.append(" (").append(column).append(")");
-		return sb.toString();
-	}
+        return sb.toString();
+    }
 
-	String alterSql() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("ALTER TABLE ").append(table).append(" ADD ");
-		appendDefinition(sb);
-		return sb.toString();
-	}
+    String alterSql() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("ALTER TABLE ").append(table).append(" ADD ");
+        appendDefinition(sb);
+        return sb.toString();
+    }
 }

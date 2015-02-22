@@ -20,116 +20,119 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 public final class VTableCreation {
-	String table;
-	String sourceIdName;
-	ArrayList<VTableColumn> columns;
-	HashSet<String> indices;
-	StringBuilder sb;
+    String table;
+    String sourceIdName;
+    ArrayList<VTableColumn> columns;
+    HashSet<String> indices;
+    StringBuilder sb;
 
-	/**
-	 * VTableCreation add an integer primary key column "_id" to the table
-	 * automatically because CursorAdapter requires it, so do not add
-	 * "_id" column again.
-	 * 
-	 * @param table
-	 *            table name
-	 * @param sourceIdName
-	 *            if the id is not locally generated, the data source id column
+    /**
+     * VTableCreation add an integer primary key column "_id" to the table
+     * automatically because CursorAdapter requires it, so do not add
+     * "_id" column again.
+     * 
+     * @param table
+     *            table name
+     * @param sourceIdName
+     *            if the id is not locally generated, the data source id column
 	 *            name may not be "_id", if you want to update database with JSONObject, 
-	 *            you need to specify a source id column name.
-	 *            The default value is "id" if null is provided.
-	 */
-	public VTableCreation(String table, String sourceIdName) {
-		this.table = table;
-		this.sourceIdName = sourceIdName!=null?sourceIdName:"id";
-		columns = new ArrayList<VTableColumn>();
-		indices = new HashSet<String>();
-		sb = new StringBuilder();
-		sb.append("CREATE TABLE IF NOT EXISTS ").append(table)
-				.append(" (_id INTEGER PRIMARY KEY NOT NULL");
-	}
+     *            you need to specify a source id column name.
+     *            The default value is "id" if null is provided.
+     */
+    public VTableCreation(String table, String sourceIdName) {
+        this.table = table;
+        this.sourceIdName = sourceIdName != null ? sourceIdName : "id";
+        columns = new ArrayList<VTableColumn>();
+        indices = new HashSet<String>();
+        sb = new StringBuilder();
+        sb.append("CREATE TABLE IF NOT EXISTS ").append(table)
+                .append(" (_id INTEGER PRIMARY KEY NOT NULL");
+    }
 
-	public VTableCreation addIntegerColumn(String column, Long defaultValue) {
+    public VTableCreation addIntegerColumn(String column, Long defaultValue) {
 		columns.add(new VTableColumn(table, column, VTableColumn.TYPE_INTEGER,
 				defaultValue, null, false, false, false));
-		return this;
-	}
+        return this;
+    }
 
 	public VTableCreation addIntegerNotNullCollumn(String column) {
 		columns.add(new VTableColumn(table, column, VTableColumn.TYPE_INTEGER,
 				null, null, false, false, true));
-		return this;
-	}
+        return this;
+    }
 
 	public VTableCreation addTextColumn(String column, String defaultValue,
 			boolean collateNoCase) {
 		columns.add(new VTableColumn(table, column, VTableColumn.TYPE_TEXT,
 				defaultValue, null, false, collateNoCase, false));
-		return this;
-	}
+        return this;
+    }
 
 	public VTableCreation addTextNotNullColumn(String column,
 			boolean collateNoCase) {
 		columns.add(new VTableColumn(table, column, VTableColumn.TYPE_TEXT,
 				null, null, false, collateNoCase, true));
-		return this;
-	}
+        return this;
+    }
 
-	public VTableCreation addRealColumn(String column, Double defaultValue) {
+    public VTableCreation addRealColumn(String column, Double defaultValue) {
 		columns.add(new VTableColumn(table, column, VTableColumn.TYPE_REAL,
 				defaultValue, null, false, false, false));
-		return this;
-	}
+        return this;
+    }
 
-	public VTableCreation addRealNotNullColumn(String column) {
+    public VTableCreation addRealNotNullColumn(String column) {
 		columns.add(new VTableColumn(table, column, VTableColumn.TYPE_REAL,
 				null, null, false, false, true));
-		return this;
-	}
+        return this;
+    }
 
-	public VTableCreation addBlobColumn(String column) {
+    public VTableCreation addBlobColumn(String column) {
 		columns.add(new VTableColumn(table, column, VTableColumn.TYPE_BLOB,
 				null, null, false, false, false));
-		return this;
-	}
+        return this;
+    }
 
 	public VTableCreation addIntegerForeignKeyColumn(String column,
 			String parentTable, boolean onDeleteCascade) {
 		columns.add(new VTableColumn(table, column, VTableColumn.TYPE_INTEGER,
 				null, parentTable, onDeleteCascade, false, false));
-		createIndex(column, false);
-		return this;
-	}
+        createIndex(column, false);
+        return this;
+    }
 
 	public VTableCreation addIntegerForeignKeyNotNullColumn(String column,
 			String parentTable, boolean onDeleteCascade) {
 		columns.add(new VTableColumn(table, column, VTableColumn.TYPE_INTEGER,
 				null, parentTable, onDeleteCascade, false, true));
-		createIndex(column, false);
-		return this;
-	}
+        createIndex(column, false);
+        return this;
+    }
 
-	public VTableCreation addTableColumn(VTableColumn column) {
-		columns.add(column);
-		if (column.parentTable != null)
-			createIndex(column.name, false);
-		return this;
-	}
-	
-	public VTableCreation createIndex(String column, boolean unique) {
-		indices.add(VTableColumn.createIndexSql(table, column, unique));
-		return this;
-	}
+    public VTableCreation addTableColumn(VTableColumn column) {
+        columns.add(column);
+        if (column.parentTable != null)
+            createIndex(column.name, false);
+        return this;
+    }
 
-	String sqlString() {
-		if (columns.size() > 0) {
-			for (VTableColumn tf : columns) {
-				sb.append(", ");
-				tf.appendDefinition(sb);
-			}
-		}
+    public VTableCreation createIndex(String column, boolean unique) {
+        indices.add(VTableColumn.createIndexSql(table, column, unique));
+        return this;
+    }
+
+    String sqlString() {
+        if (columns.size() > 0) {
+            for (VTableColumn tf : columns) {
+                if (tf.vDatabaseVersion == null) {
+                    sb.append(", ");
+                    tf.appendDefinition(sb);
+                } // else the column was added by alter table so do not apply it
+                  // here
+            }
+        }
 		sb.append(")");
-		return sb.toString();
-	}
+        return sb.toString();
+    }
 
 }
